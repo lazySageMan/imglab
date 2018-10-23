@@ -83,13 +83,11 @@
         }
 
         this.submitWork = function(e){
-
         	if (imgSelected.name) {
 
 	        	var selectedImageName = imgSelected.name;
                 var image = labellingData[ selectedImageName ];
                 var labels = [];
-                console.log(image)
                 if(image.workType === "rect"){
                     // for(var shape_i = 0 ; shape_i < image.shapes.length; shape_i++){
                         if(image.shapes.length === 2){
@@ -128,9 +126,16 @@
                         }
                     // }
                 } else if(image.workType === "count"){
-                    image.shapes[0].featurePoints.forEach((item) => {
-                        labels.push({x:item.x, y:item.y})
-                    })
+                    if(imgSelected.category){
+                        image.shapes[0].featurePoints.forEach((item) => {
+                            labels.push({x:item.x, y:item.y, category:imgSelected.category})
+                        }) 
+                    }else{
+                        image.shapes[0].featurePoints.forEach((item) => {
+                            labels.push({x:item.x, y:item.y})
+                        }) 
+                    }
+                    
                 }
                 if (labels.length > 0) {
                     var instance = axiosClient();
